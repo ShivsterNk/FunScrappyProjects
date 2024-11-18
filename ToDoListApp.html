@@ -1,0 +1,186 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>To-Do List Application</title>
+	<link rel="stylesheet">
+	
+<style type="text/css">
+
+*{
+	margin: 0;
+	padding: 0;
+	font-family: arial;
+	box-sizing: border-box;
+}
+.container {
+	width: 100%;
+	min-height: 100vh;
+	background: linear-gradient(140deg, red, orange);
+	padding: 10px;
+}
+.todo-app{
+	width: 100%;
+	max-width: 540px;
+	background: white;
+	margin: 100px auto 20px;
+	padding: 40px 30px 70px;
+	border-radius: 10px;
+}
+.todo-app h2{
+	color: #002765;
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+}
+.todo-app h2 img{
+	width: 120px;
+	margin-left: 10px;
+}
+.row{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background: #edeef0;
+	border-radius: 30px;
+	padding-left: 20px;
+	margin-bottom: 25px;
+}
+input {
+	flex: 1;
+	border: none;
+	outline: none;
+	background: transparent;
+	padding: 10px;
+	font-size: 1em;
+}
+button {
+	border: none;
+	border-radius: 35px;
+	outline: none;
+	padding: 16px 50px;
+	background: blue;
+	color: #fff;
+	font-size: 16px;
+	cursor: pointer;
+	border-radius: 40px;
+}
+ul li{
+	list-style: none;
+	font-size: 1.5em;
+	padding: 12px 8px 12px 50px;
+	user-select: none;
+	cursor: pointer;
+	position: relative;
+}
+ul li::before{
+	content: '';
+	position: absolute;
+	height: 28px;
+	width: 28px;
+	border-radius: 50%;
+	background-image: url("../Downloads/unchecked-10-64.png");
+	background-size: cover;
+	background-position: center;
+	top: 12px;
+	left: 9px;
+}
+ul li.checked{
+	color: #555;
+	text-decoration: line-through;
+}
+ul li.checked::before{
+	background-image: url("../Downloads/check-symbol-4794.png");
+}
+ul li span{
+	position: absolute;
+	right: 0;
+	top: 5px;
+	width: 40px;
+	height: 40px;
+	font-size: 22px;
+	color: #555;
+	line-height: 40px;
+	text-align: center;
+}
+ul li span:hover{
+	background: #edeef0;
+}
+
+</style>
+</head>
+
+<body>
+<div class="container">
+	<div class="todo-app">
+		<h2>To Do List<img src="../Downloads/test-document-green-checkmarks-and-pencil-17445.png" 
+		alt="test-document-green-checkmarks-and-pencil-17445" 
+		title="test-document-green-checkmarks-and-pencil-17445" width="128" height="128"/></h2>
+		<div class="row">
+			<input type="text" id="input-box" placeholder="Add Text Here">
+			<button onclick="addTask()">Add</button>
+		</div>
+		<ul id="list-container">
+			<!-- Tasks will appear here -->
+		</ul>
+	</div>
+</div>
+
+<script type="text/javascript">
+	const inputBox = document.getElementById("input-box");
+  	const listContainer = document.getElementById("list-container");
+	
+  	function addTask() {
+    	if (inputBox.value === '') {
+      		alert("You must write something!");
+    	} 
+    	else {
+      		let li = document.createElement("li");
+      		li.innerHTML = inputBox.value;
+      		listContainer.appendChild(li);
+          	let span = document.createElement("span");
+      		span.innerHTML = "\u00d7"; 
+      		li.appendChild(span);
+			
+			saveData();
+    	}
+    	inputBox.value = "";
+  	}
+
+  	listContainer.addEventListener("click", function(e) {
+    	if (e.target.tagName === "LI") {
+      		e.target.classList.toggle("checked");
+      		saveData();
+    	} 
+    	else if (e.target.tagName === "SPAN") {
+      		e.target.parentElement.remove();
+      		saveData(); 
+    	}
+  	}, false);
+  	
+	function saveData() {
+    	localStorage.setItem("data", listContainer.innerHTML);
+    }
+    
+    function showTask() {
+    	const savedData = localStorage.getItem("data");
+    	if (savedData) {
+    		listContainer.innerHTML = savedData;
+    	
+    		const tasks = listContainer.getElementsByTagName("li");
+    		for (let task of tasks){
+    			if (task.classList.contains("checked")) {
+    				task.classList.add("checked");
+    			}
+    		}
+    	}
+    	else {
+    		localStorage.removeItem("data");
+    	}
+    }
+    
+    showTask();
+  	
+</script>
+
+</body>
+</html>
